@@ -10,6 +10,9 @@ module.exports = {
         "wow-white": "#FFFF",
       },
     },
+    fontFamily: {
+      inter: ["Inter", "inter"],
+    },
   },
   plugins: [require("daisyui")],
 };
