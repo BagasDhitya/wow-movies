@@ -1,16 +1,39 @@
-import React, { useState, InputHTMLAttributes } from 'react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { createUserWithEmailAndPassword, sendEmailVerification, User } from 'firebase/auth'
+import { auth } from '../../../firebase'
+
 import Button from '../../components/Button'
 import Input from '../../components/Input'
 import Layout from '../../components/Layout'
 
 const Register = () => {
 
-    const [username, setUsername] = useState()
-    const [password, setPassword] = useState()
-    const [email, setEmail] = useState()
+    const navigate = useNavigate()
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
 
-    const handlerSubmit = () => {
-        alert(username + " " + email)
+    const emailVerification = (email: User) => {
+        sendEmailVerification(email)
+            .then(() => {
+                alert('Email verification sent!')
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user
+                emailVerification(user)
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     return (
