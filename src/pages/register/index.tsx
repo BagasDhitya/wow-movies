@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createUserWithEmailAndPassword, sendEmailVerification, User } from 'firebase/auth'
 import { auth } from '../../../firebase'
+import Swal from 'sweetalert2'
 
 import Button from '../../components/Button'
 import Input from '../../components/Input'
@@ -17,10 +18,20 @@ const Register = () => {
     const emailVerification = (email: User) => {
         sendEmailVerification(email)
             .then(() => {
-                alert('Email verification sent!')
+                Swal.fire({
+                    icon: "success",
+                    title: "Success!",
+                    text: `A verification link has been sent to the ${email.email}`,
+                    showConfirmButton: true,
+                })
             })
-            .catch((error) => {
-                alert(error)
+            .catch(() => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: `Something went wrong, please try again later!`,
+                    showConfirmButton: true,
+                })
             })
     }
 
